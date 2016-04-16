@@ -24,7 +24,8 @@ void Camera::update(unsigned int elapsed, Player player, Map map) {
   if (ox > tx) ox = std::max(ox - kMaxSpeed * elapsed, tx);
   if (ox < tx) ox = std::min(ox + kMaxSpeed * elapsed, tx);
 
-  // TODO only move camera vertically when on ground
+  // TODO only move camera vertically when on ground, or make the camera behave
+  // differently for different forms the player might take on
   float ty = _window(0, map.pixel_height(), player.y_position(), kHeight);
   if (oy > ty) oy = std::max(oy - kMaxSpeed * elapsed, ty);
   if (oy < ty) oy = std::min(oy + kMaxSpeed * elapsed, ty);

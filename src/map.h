@@ -22,4 +22,6 @@ class Map {
     Sprite brick;
     int height, width;
     char tiles[128][1024];
+
+    bool check_tile_range(int x1, int x2, int y1, int y2);
 };

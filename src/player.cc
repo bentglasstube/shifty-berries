@@ -100,5 +100,5 @@ void Player::update_y(unsigned int elapsed, Map map) {
   }
 }
 
-Rect Player::box_col_h() { return Rect(pos_x - 8, pos_y - 32, pos_x + 8, pos_y); }
-Rect Player::box_col_v() { return Rect(pos_x - 8, pos_y - 32, pos_x + 8, pos_y); }
+Rect Player::box_col_h() { return Rect(pos_x - 8, pos_y - 30, pos_x + 8, pos_y - 2); }
+Rect Player::box_col_v() { return Rect(pos_x - 6, pos_y - 32, pos_x + 6, pos_y); }

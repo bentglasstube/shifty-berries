@@ -1,7 +1,6 @@
 #include "map.h"
 
 #include <stdio.h>
-// #include <string.h>
 
 Map::Map() : brick("map", 0, 16, 16, 16) {}
 
@@ -49,10 +48,28 @@ bool Map::tile_at(float x, float y) {
 }
 
 bool Map::collision(Rect box, float dx, float dy) {
-  if (dx > 0) return tile_at(box.right + dx, box.top    + dy) || tile_at(box.right + dx, box.bottom + dy);
-  if (dx < 0) return tile_at(box.left  + dx, box.top    + dy) || tile_at(box.left  + dx, box.bottom + dy);
-  if (dy > 0) return tile_at(box.left  + dx, box.bottom + dy) || tile_at(box.right + dx, box.bottom + dy);
-  if (dy < 0) return tile_at(box.left  + dx, box.top    + dy) || tile_at(box.right + dx, box.top + dy);
+  if (dx != 0) {
+    int x = (int) ((dx < 0 ? box.left : box.right) + dx) / 16;
+    int top = (int) box.top / 16;
+    int bottom = (int) box.bottom / 16;
+    return check_tile_range(x, x, top, bottom);
+  }
 
+  if (dy != 0) {
+    int y = (int) ((dy < 0 ? box.top : box.bottom) + dy) / 16;
+    int left = (int) box.left / 16;
+    int right = (int) box.right / 16;
+    return check_tile_range(left, right, y, y);
+  }
+
+  return false;
+}
+
+bool Map::check_tile_range(int x1, int x2, int y1, int y2) {
+  for (int y = y1; y <= y2; ++y) {
+    for (int x = x1; x <= x2; ++x) {
+      if (tiles[y][x] == 'X') return true;
+    }
+  }
   return false;
 }
