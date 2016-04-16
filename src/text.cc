@@ -1,7 +1,5 @@
 #include "text.h"
 
-#include "graphics.h"
-
 Text::Text(const std::string& file) : file(file) {}
 
 void Text::draw(Graphics& graphics, const std::string& text, int x, int y, Text::Alignment alignment) {

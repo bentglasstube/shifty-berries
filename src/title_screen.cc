@@ -2,14 +2,14 @@
 
 #include "animated_sprite.h"
 #include "audio.h"
+#include "game_screen.h"
 #include "graphics.h"
 #include "input.h"
 #include "text.h"
 
 void TitleScreen::init() {
+  backdrop.reset(new Backdrop("title"));
   text.reset(new Text("text"));
-  blob.reset(new AnimatedSprite("sprites", 0, 0, 16, 16, 3, 8, AnimatedSprite::BOUNCE));
-  heart.reset(new Sprite("sprites", 0, 16, 16, 16));
 }
 
 bool TitleScreen::update(Input& input, Audio& audio, Graphics& graphics, unsigned int elapsed) {
@@ -17,9 +17,10 @@ bool TitleScreen::update(Input& input, Audio& audio, Graphics& graphics, unsigne
 }
 
 void TitleScreen::draw(Graphics& graphics) {
-  blob->draw(graphics, 312, 232);
-  heart->draw(graphics, 280, 232);
-  heart->draw(graphics, 344, 232);
-
+  backdrop->draw(graphics);
   text->draw(graphics, "Press any key", 320, 264, Text::CENTER);
+}
+
+Screen* TitleScreen::next_screen() {
+  return new GameScreen();
 }

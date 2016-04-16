@@ -1,7 +1,5 @@
 #include "screen.h"
 
-#include "input.h"
-
 bool Screen::process_input(Input& input) {
   SDL_Event event;
 

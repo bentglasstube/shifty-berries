@@ -1,12 +1,10 @@
 #pragma once
 
-#include <memory>
-
-#include "backdrop.h"
+#include "map.h"
+#include "player.h"
 #include "screen.h"
-#include "text.h"
 
-class TitleScreen : public Screen {
+class GameScreen : public Screen {
   public:
 
     void init();
@@ -17,7 +15,6 @@ class TitleScreen : public Screen {
     std::string get_music_track() { return ""; }
 
   private:
-
-    std::unique_ptr<Text> text;
-    std::unique_ptr<Backdrop> backdrop;
+    Player player;
+    Map map;
 };

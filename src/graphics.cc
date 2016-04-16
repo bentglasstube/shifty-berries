@@ -8,7 +8,8 @@ namespace {
 }
 
 Graphics::Graphics() {
-  int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP;
+  // int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP;
+  int flags = SDL_WINDOW_OPENGL;
 
   window = SDL_CreateWindow("Ludum Dare 35", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
   renderer = SDL_CreateRenderer(window, -1, 0);
@@ -26,9 +27,24 @@ Graphics::~Graphics() {
   SDL_DestroyWindow(window);
 }
 
-void Graphics::blit(const std::string& file, const SDL_Rect* srect, const SDL_Rect* drect) {
+void Graphics::blit(const std::string& file, const SDL_Rect* srect, const SDL_Rect* drect, FlipDirection flip) {
+  SDL_RendererFlip f = SDL_FLIP_NONE;
+  switch (flip) {
+    case HORIZONTAL:
+      f = SDL_FLIP_HORIZONTAL;
+      break;
+    case VERTICAL:
+      f = SDL_FLIP_VERTICAL;
+      break;
+    case BOTH:
+      f = (SDL_RendererFlip) (SDL_FLIP_VERTICAL | SDL_FLIP_HORIZONTAL);
+      break;
+    case NONE:
+      f = (SDL_RendererFlip) 0;
+      break;
+  }
   SDL_Texture* texture = load_image(file);
-  SDL_RenderCopy(renderer, texture, srect, drect);
+  SDL_RenderCopyEx(renderer, texture, srect, drect, 0.0f, NULL, f);
 }
 
 void Graphics::flip() {

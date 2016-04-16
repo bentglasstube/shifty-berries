@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Graphics;
+#include "graphics.h"
 
 class Text {
   public:

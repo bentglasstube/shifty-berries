@@ -10,7 +10,9 @@ class Graphics {
     Graphics();
     ~Graphics();
 
-    void blit(const std::string& file, const SDL_Rect* srect, const SDL_Rect* drect);
+    enum FlipDirection { NONE, HORIZONTAL, VERTICAL, BOTH };
+
+    void blit(const std::string& file, const SDL_Rect* srect, const SDL_Rect* drect, FlipDirection flip = NONE);
     void flip();
     void clear();
 

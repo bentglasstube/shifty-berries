@@ -1,7 +1,5 @@
 #include "sprite.h"
 
-#include "graphics.h"
-
 Sprite::Sprite(const std::string& file, int x, int y, int w, int h) : file(file) {
   rect.x = x;
   rect.y = y;
@@ -9,7 +7,7 @@ Sprite::Sprite(const std::string& file, int x, int y, int w, int h) : file(file)
   rect.h = h;
 }
 
-void Sprite::draw(Graphics& graphics, int x, int y) {
+void Sprite::draw(Graphics& graphics, int x, int y, Graphics::FlipDirection flip) {
   SDL_Rect dest;
 
   dest.x = x;
@@ -17,5 +15,5 @@ void Sprite::draw(Graphics& graphics, int x, int y) {
   dest.w = rect.w;
   dest.h = rect.h;
 
-  graphics.blit(file, &rect, &dest);
+  graphics.blit(file, &rect, &dest, flip);
 }

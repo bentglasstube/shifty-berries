@@ -2,9 +2,9 @@
 
 #include <string>
 
-class Audio;
-class Graphics;
-class Input;
+#include "audio.h"
+#include "graphics.h"
+#include "input.h"
 
 class Screen {
 
