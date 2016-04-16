@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "camera.h"
 #include "map.h"
 #include "player.h"
@@ -16,7 +18,7 @@ class GameScreen : public Screen {
     std::string get_music_track() { return ""; }
 
   private:
-    Player player;
+    std::unique_ptr<Player> player;
     Map map;
     Camera camera;
 };

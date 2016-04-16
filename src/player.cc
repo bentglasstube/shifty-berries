@@ -3,20 +3,12 @@
 #include "accelerators.h"
 
 namespace {
-  const float kWalkingAccel     = 0.0005f;
-  const float kAirAccel         = 0.0003f;
-  const float kMaxSpeedX        = 0.15f;
-  const float kJumpSpeed        = 0.35f;
-
   const float kGravity          = 0.0012f;
   const float kTerminalVelocity = 0.5f;
 }
 
 Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
-  jump(false), crouch(false), facing(RIGHT),
-  walking("sprites", 0, 0, 16, 32, 4, 14),
-  standing("sprites", 0, 0, 16, 32),
-  crouching("sprites", 64, 0, 16, 32) {}
+  jump(false), facing(RIGHT) {}
 
 void Player::update(unsigned int elapsed, Map map) {
   if (elapsed > 50) elapsed = 50;
@@ -26,14 +18,7 @@ void Player::update(unsigned int elapsed, Map map) {
 
 void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
   Graphics::FlipDirection dir = facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE;
-  Sprite* sprite;
-
-  if ((jump && velo_y < 0) || crouch) sprite = &crouching;
-  else if (!on_ground()) sprite = &standing;
-  else if (velo_x != 0) sprite = &walking;
-  else sprite = &standing;
-
-  sprite->draw(graphics, pos_x - 8 - x_offset, pos_y - 32 - y_offset, dir);
+  get_sprite()->draw(graphics, pos_x - get_width() / 2 - x_offset, pos_y - get_height() - y_offset, dir);
 }
 
 void Player::start_moving_left() {
@@ -53,7 +38,7 @@ void Player::stop_moving() {
 void Player::start_jumping() {
   if (velo_y == 0) {
     jump = true;
-    velo_y = -kJumpSpeed;
+    velo_y = -get_jump_speed();
   }
 }
 
@@ -79,14 +64,14 @@ bool Player::on_ground() const {
 }
 
 void Player::update_x(unsigned int elapsed, Map map) {
-  velo_x += accel_x * (on_ground() ? kWalkingAccel : kAirAccel) * elapsed;
+  velo_x += accel_x * (on_ground() ? get_ground_accel() : get_air_accel()) * elapsed;
 
   if (on_ground()) {
     float friction = map.tile_at(pos_x, pos_y + 1).friction;
     velo_x = FrictionAccelerator(friction).update_velocity(velo_x, elapsed);
-    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * kWalkingAccel, accel_x * kMaxSpeedX).update_velocity(velo_x, elapsed);
+    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * get_ground_accel(), accel_x * get_max_speed()).update_velocity(velo_x, elapsed);
   } else {
-    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * kAirAccel, accel_x * kMaxSpeedX).update_velocity(velo_x, elapsed);
+    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * get_air_accel(), accel_x * get_max_speed()).update_velocity(velo_x, elapsed);
   }
 
   if (map.collision(box_col_h(), velo_x * elapsed, 0)) {
@@ -106,5 +91,5 @@ void Player::update_y(unsigned int elapsed, Map map) {
   }
 }
 
-Rect Player::box_col_h() { return Rect(pos_x - 8, pos_y - 30, pos_x + 8, pos_y - 2); }
-Rect Player::box_col_v() { return Rect(pos_x - 6, pos_y - 32, pos_x + 6, pos_y); }
+Rect Player::box_col_h() { return Rect(pos_x - get_width() / 2, pos_y - get_height() + 2, pos_x + get_width() / 2, pos_y - 2); }
+Rect Player::box_col_v() { return Rect(pos_x - get_width() + 2, pos_y - get_height(), pos_x + get_width() - 2, pos_y); }
