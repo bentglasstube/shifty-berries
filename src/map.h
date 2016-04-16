@@ -6,12 +6,18 @@
 
 class Map {
   public:
+
+    struct Tile {
+      bool obstruction;
+      float friction;
+    };
+
     Map();
 
     void load(std::string file);
     void draw(Graphics& graphics, int x_offset, int y_offset);
 
-    bool tile_at(float x, float y);
+    Tile tile_at(float x, float y);
 
     bool collision(Rect box, float dx, float dy);
 
@@ -23,5 +29,6 @@ class Map {
     int height, width;
     char tiles[128][1024];
 
+    Tile tile(int x, int y);
     bool check_tile_range(int x1, int x2, int y1, int y2);
 };

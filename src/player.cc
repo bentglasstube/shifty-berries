@@ -3,8 +3,6 @@
 #include "accelerators.h"
 
 namespace {
-  const float kFriction         = 0.0005f;
-
   const float kWalkingAccel     = 0.0005f;
   const float kAirAccel         = 0.0003f;
   const float kMaxSpeedX        = 0.15f;
@@ -84,8 +82,8 @@ void Player::update_x(unsigned int elapsed, Map map) {
   velo_x += accel_x * (on_ground() ? kWalkingAccel : kAirAccel) * elapsed;
 
   if (on_ground()) {
-    // TODO get friction from ground tile
-    velo_x = FrictionAccelerator(kFriction).update_velocity(velo_x, elapsed);
+    float friction = map.tile_at(pos_x, pos_y + 1).friction;
+    velo_x = FrictionAccelerator(friction).update_velocity(velo_x, elapsed);
     if (accel_x != 0) velo_x = ConstAccelerator(accel_x * kWalkingAccel, accel_x * kMaxSpeedX).update_velocity(velo_x, elapsed);
   } else {
     if (accel_x != 0) velo_x = ConstAccelerator(accel_x * kAirAccel, accel_x * kMaxSpeedX).update_velocity(velo_x, elapsed);

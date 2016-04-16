@@ -44,8 +44,8 @@ void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
   }
 }
 
-bool Map::tile_at(float x, float y) {
-  return tiles[(int)y / 16][(int)x / 16] != '.';
+Map::Tile Map::tile_at(float x, float y) {
+  return tile((int)x / 16, (int)y / 16);
 }
 
 bool Map::collision(Rect box, float dx, float dy) {
@@ -66,10 +66,26 @@ bool Map::collision(Rect box, float dx, float dy) {
   return false;
 }
 
+Map::Tile Map::tile(int x, int y) {
+  char t = tiles[y][x];
+
+  Tile tile;
+
+  if (t >= 'A' && t <= 'X') {
+    tile.obstruction = true;
+    tile.friction = t > 'R' ? 0.0001f : 0.0005f;
+  } else {
+    tile.obstruction = false;
+  }
+
+  return tile;
+}
+
 bool Map::check_tile_range(int x1, int x2, int y1, int y2) {
   for (int y = y1; y <= y2; ++y) {
     for (int x = x1; x <= x2; ++x) {
-      if (tiles[y][x] != '.') return true;
+      Tile t = tile(x, y);
+      if (t.obstruction) return true;
     }
   }
   return false;
