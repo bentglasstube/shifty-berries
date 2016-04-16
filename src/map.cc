@@ -24,15 +24,20 @@ void Map::load(std::string file) {
   fclose(fd);
 }
 
-void Map::draw(Graphics& graphics) {
+void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
   for (int y = 0; y < height; ++y) {
-    if (16 * y > 480) break;
+    int gy = 16 * y - y_offset;
+    if (gy < -16) continue;
+    if (gy > 480) break;
+
     for (int x = 0; x < width; ++x) {
-      if (16 * x > 640) break;
+      int gx = 16 * x - x_offset;
+      if (gx < -16) continue;
+      if (gx > 640) break;
 
       switch (tiles[y][x]) {
         case 'X':
-          brick.draw(graphics, 16 * x, 16 * y);
+          brick.draw(graphics, gx, gy);
           break;
       }
     }

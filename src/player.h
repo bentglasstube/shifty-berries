@@ -11,7 +11,7 @@ class Player {
     Player();
 
     void update(unsigned int elapsed, Map map);
-    void draw(Graphics& graphics);
+    void draw(Graphics& graphics, int x_offset, int y_offset);
 
     void start_moving_left();
     void start_moving_right();
@@ -21,6 +21,8 @@ class Player {
     void stop_jumping();
 
     void set_position(float x, float y);
+    float x_position();
+    float y_position();
 
   private:
 

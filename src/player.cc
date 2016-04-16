@@ -22,8 +22,12 @@ void Player::update(unsigned int elapsed, Map map) {
   update_y(elapsed, map);
 }
 
-void Player::draw(Graphics& graphics) {
-  sprite.draw(graphics, pos_x - 8, pos_y - 32, facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE);
+void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
+  sprite.draw(
+      graphics,
+      pos_x - 8 - x_offset,
+      pos_y - 32 - y_offset,
+      facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE);
 }
 
 void Player::start_moving_left() {
@@ -54,6 +58,14 @@ void Player::stop_jumping() {
 void Player::set_position(float x, float y) {
   pos_x = x;
   pos_y = y;
+}
+
+float Player::x_position() {
+  return pos_x;
+}
+
+float Player::y_position() {
+  return pos_y;
 }
 
 bool Player::on_ground() const {

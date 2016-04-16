@@ -9,11 +9,14 @@ class Map {
     Map();
 
     void load(std::string file);
-    void draw(Graphics& graphics);
+    void draw(Graphics& graphics, int x_offset, int y_offset);
 
     bool tile_at(float x, float y);
 
     bool collision(Rect box, float dx, float dy);
+
+    int pixel_width() { return width * 16; }
+    int pixel_height() { return height * 16; }
 
   private:
     Sprite brick;

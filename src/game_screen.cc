@@ -5,7 +5,7 @@ void GameScreen::init() {
   map.load("test");
 }
 
-bool GameScreen::update(Input& input, Audio& audio, Graphics& graphics, unsigned int elapsed) {
+bool GameScreen::update(Input& input, Audio&, Graphics&, unsigned int elapsed) {
   if (input.key_pressed(SDLK_ESCAPE)) return false;
 
   if (input.key_held(SDLK_a) && input.key_held(SDLK_d)) {
@@ -23,12 +23,14 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics& graphics, unsigned
   }
 
   player.update(elapsed, map);
+  camera.update(elapsed, player, map);
+
   return true;
 }
 
 void GameScreen::draw(Graphics& graphics) {
-  map.draw(graphics);
-  player.draw(graphics);
+  map.draw(graphics, camera.x_offset(), camera.y_offset());
+  player.draw(graphics, camera.x_offset(), camera.y_offset());
 }
 
 Screen* GameScreen::next_screen() {

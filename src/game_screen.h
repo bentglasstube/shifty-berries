@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera.h"
 #include "map.h"
 #include "player.h"
 #include "screen.h"
@@ -17,4 +18,5 @@ class GameScreen : public Screen {
   private:
     Player player;
     Map map;
+    Camera camera;
 };
