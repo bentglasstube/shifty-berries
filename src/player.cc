@@ -14,7 +14,11 @@ namespace {
   const float kTerminalVelocity = 0.5f;
 }
 
-Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0), sprite("sprites", 0, 0, 16, 32, 4, 14) {}
+Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
+  jump(false), crouch(false), facing(RIGHT),
+  walking("sprites", 0, 0, 16, 32, 4, 14),
+  standing("sprites", 0, 0, 16, 32),
+  crouching("sprites", 64, 0, 16, 32) {}
 
 void Player::update(unsigned int elapsed, Map map) {
   if (elapsed > 50) elapsed = 50;
@@ -23,21 +27,25 @@ void Player::update(unsigned int elapsed, Map map) {
 }
 
 void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
-  sprite.draw(
-      graphics,
-      pos_x - 8 - x_offset,
-      pos_y - 32 - y_offset,
-      facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE);
+  Graphics::FlipDirection dir = facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE;
+  Sprite* sprite;
+
+  if ((jump && velo_y < 0) || crouch) sprite = &crouching;
+  else if (!on_ground()) sprite = &standing;
+  else if (velo_x != 0) sprite = &walking;
+  else sprite = &standing;
+
+  sprite->draw(graphics, pos_x - 8 - x_offset, pos_y - 32 - y_offset, dir);
 }
 
 void Player::start_moving_left() {
   accel_x = -1;
-  facing = LEFT;
+  if (on_ground()) facing = LEFT;
 }
 
 void Player::start_moving_right() {
   accel_x = 1;
-  facing = RIGHT;
+  if (on_ground()) facing = RIGHT;
 }
 
 void Player::stop_moving() {

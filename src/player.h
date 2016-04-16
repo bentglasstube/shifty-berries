@@ -38,8 +38,9 @@ class Player {
 
     int accel_x;
     float velo_x, velo_y, pos_x, pos_y;
-    bool jump;
+    bool jump, crouch;
     Facing facing;
 
-    AnimatedSprite sprite;
+    AnimatedSprite walking;
+    Sprite standing, crouching;
 };
