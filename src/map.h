@@ -2,7 +2,7 @@
 
 #include "graphics.h"
 #include "rect.h"
-#include "sprite.h"
+#include "spritemap.h"
 
 class Map {
   public:
@@ -19,7 +19,7 @@ class Map {
     int pixel_height() { return height * 16; }
 
   private:
-    Sprite brick;
+    SpriteMap tileset;
     int height, width;
     char tiles[128][1024];
 

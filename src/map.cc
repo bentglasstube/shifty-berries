@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-Map::Map() : brick("map", 0, 16, 16, 16) {}
+Map::Map() : tileset("map", 6, 16, 16) {}
 
 void Map::load(std::string file) {
   const std::string path("content/" + file + ".txt");
@@ -34,17 +34,18 @@ void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
       if (gx < -16) continue;
       if (gx > 640) break;
 
-      switch (tiles[y][x]) {
-        case 'X':
-          brick.draw(graphics, gx, gy);
-          break;
+      char t = tiles[y][x];
+      if (t >= 'A' && t <= 'Z') {
+        tileset.draw(graphics, t - 'A', gx, gy);
+      } else if (t >= 'a' && t <= 'z') {
+        tileset.draw(graphics, t - 'a' + 26, gx, gy);
       }
     }
   }
 }
 
 bool Map::tile_at(float x, float y) {
-  return tiles[(int)y / 16][(int)x / 16] == 'X';
+  return tiles[(int)y / 16][(int)x / 16] != '.';
 }
 
 bool Map::collision(Rect box, float dx, float dy) {
@@ -68,7 +69,7 @@ bool Map::collision(Rect box, float dx, float dy) {
 bool Map::check_tile_range(int x1, int x2, int y1, int y2) {
   for (int y = y1; y <= y2; ++y) {
     for (int x = x1; x <= x2; ++x) {
-      if (tiles[y][x] == 'X') return true;
+      if (tiles[y][x] != '.') return true;
     }
   }
   return false;
