@@ -26,4 +26,15 @@ run: $(EXECUTABLE)
 clean:
 	rm -rf $(BUILDDIR)
 
-.PHONY: all clean run
+video: ld35.mkv
+
+ld35.mkv: ld35.glc ld35.wav
+	glc-play $< -o - -y 1 |ffmpeg -i - -i ld35.wav -acodec flac -vcodec libx264 -y $@
+
+ld35.wav: ld35.glc
+	glc-play $< -a 1 -o $@
+
+ld35.glc: $(EXECUTABLE)
+	glc-capture -so $@ $(EXECUTABLE)
+
+.PHONY: all clean run video
