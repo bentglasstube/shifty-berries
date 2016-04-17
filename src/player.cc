@@ -2,8 +2,13 @@
 
 #include "accelerators.h"
 
-Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
-  jump(false), facing(RIGHT) {}
+Player::Player() :
+  width(16), height(16),
+  jump_speed(0), max_speed(0),
+  ground_accel(0), air_accel(0),
+  jump_sample(""),
+  accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
+  jumping(false), facing(RIGHT) {}
 
 void Player::update(unsigned int elapsed, Map& map, Audio& audio) {
   if (elapsed > 50) elapsed = 50;
@@ -30,15 +35,15 @@ void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
   /*     0, 0, 255); */
 
   Graphics::FlipDirection dir = facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE;
-  get_sprite()->draw(graphics, pos_x - get_width() / 2 - x_offset, pos_y - get_height() - y_offset, dir);
+  get_sprite()->draw(graphics, pos_x - width / 2 - x_offset, pos_y - height - y_offset, dir);
 }
 
-void Player::start_moving_left() {
+void Player::move_left() {
   accel_x = -1;
   if (on_ground()) facing = LEFT;
 }
 
-void Player::start_moving_right() {
+void Player::move_right() {
   accel_x = 1;
   if (on_ground()) facing = RIGHT;
 }
@@ -47,8 +52,12 @@ void Player::stop_moving() {
   accel_x = 0;
 }
 
-void Player::stop_jumping() {
-  jump = false;
+void Player::jump(Audio& audio) {
+  if (can_jump()) {
+    jumping = true;
+    velo_y = -jump_speed;
+    audio.play_sample(jump_sample);
+  }
 }
 
 void Player::set_position(float x, float y, Player::Facing f) {
@@ -58,7 +67,7 @@ void Player::set_position(float x, float y, Player::Facing f) {
 }
 
 Rect Player::bounding_box() {
-  return Rect(pos_x - get_width() / 2, pos_y - get_height(), pos_x + get_width() / 2, pos_y);
+  return Rect(pos_x - width / 2, pos_y - height, pos_x + width / 2, pos_y);
 }
 
 bool Player::on_ground() const {
@@ -66,21 +75,21 @@ bool Player::on_ground() const {
 }
 
 void Player::update_x(unsigned int elapsed, Map& map) {
-  velo_x += accel_x * (on_ground() ? get_ground_accel() : get_air_accel()) * elapsed;
+  velo_x += accel_x * (on_ground() ? ground_accel : air_accel) * elapsed;
 
   if (on_ground()) {
     float friction = map.tile_at(pos_x, pos_y + 1).friction;
     velo_x = FrictionAccelerator(friction).update_velocity(velo_x, elapsed);
-    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * get_ground_accel(), accel_x * get_max_speed()).update_velocity(velo_x, elapsed);
+    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * ground_accel, accel_x * max_speed).update_velocity(velo_x, elapsed);
   } else {
-    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * get_air_accel(), accel_x * get_max_speed()).update_velocity(velo_x, elapsed);
+    if (accel_x != 0) velo_x = ConstAccelerator(accel_x * air_accel, accel_x * max_speed).update_velocity(velo_x, elapsed);
   }
 
   Map::Tile t = map.collision(box_col_h(), velo_x * elapsed, 0);
   if (t.obstruction) {
     if (t.c == 'Z') push_crate(map, t);
-    if (velo_x > 0) pos_x = t.left - get_width() / 2;
-    else pos_x = t.right + get_width() / 2;
+    if (velo_x > 0) pos_x = t.left - width / 2;
+    else pos_x = t.right + width / 2;
     velo_x = 0;
   } else {
     pos_x += velo_x * elapsed;
@@ -99,10 +108,10 @@ void Player::update_y(unsigned int elapsed, Map& map, Audio& audio) {
   if (t.obstruction) {
     if (velo_y > 0){
       pos_y = t.top;
-      stop_jumping();
+      jumping = false;
       if (velo_y > 0.1) audio.play_sample("bump");
     } else {
-      pos_y = t.bottom + get_height();
+      pos_y = t.bottom + height;
     }
     velo_y = 0;
   } else {
@@ -112,16 +121,16 @@ void Player::update_y(unsigned int elapsed, Map& map, Audio& audio) {
 
 Rect Player::box_col_h() {
   return Rect(
-      pos_x - get_width() / 2,
-      pos_y - get_height() + 4,
-      pos_x + get_width() / 2,
+      pos_x - width / 2,
+      pos_y - height + 4,
+      pos_x + width / 2,
       pos_y - 4);
 }
 
 Rect Player::box_col_v() {
   return Rect(
-      pos_x - get_width() / 2 + 2,
-      pos_y - get_height(),
-      pos_x + get_width() / 2 - 2,
+      pos_x - width / 2 + 2,
+      pos_y - height,
+      pos_x + width / 2 - 2,
       pos_y);
 }

@@ -19,16 +19,14 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   if (input.key_held(SDLK_a) && input.key_held(SDLK_d)) {
     player->stop_moving();
   } else if (input.key_held(SDLK_a)) {
-    player->start_moving_left();
+    player->move_left();
   } else if (input.key_held(SDLK_d)) {
-    player->start_moving_right();
+    player->move_right();
   } else {
     player->stop_moving();
   }
 
-  if (input.key_pressed(SDLK_SPACE)) {
-    player->start_jumping(audio);
-  }
+  if (input.key_pressed(SDLK_SPACE)) player->jump(audio);
 
   // TODO put this somewhere sane
   if (input.key_pressed(SDLK_RSHIFT)) {

@@ -15,13 +15,12 @@ class Player {
     void update(unsigned int elapsed, Map& map, Audio& audio);
     void draw(Graphics& graphics, int x_offset, int y_offset);
 
-    virtual void start_moving_left();
-    virtual void start_moving_right();
+    virtual void move_left();
+    virtual void move_right();
     virtual void stop_moving();
 
-    virtual void start_jumping(Audio& audio) = 0;
-    virtual void stop_jumping();
-
+    void jump(Audio& audio);
+    virtual bool  can_jump() { return on_ground(); }
     virtual void push_crate(Map&, Map::Tile) {};
 
     void set_position(float x, float y, Facing f = Facing::RIGHT);
@@ -37,14 +36,6 @@ class Player {
 
     virtual Sprite* get_sprite() = 0;
 
-    virtual int get_width() = 0;
-    virtual int get_height() = 0;
-
-    virtual float get_jump_speed() = 0;
-    virtual float get_ground_accel() = 0;
-    virtual float get_air_accel() = 0;
-    virtual float get_max_speed() = 0;
-
     bool on_ground() const;
 
     void update_x(unsigned int elapsed, Map& map);
@@ -53,8 +44,13 @@ class Player {
     Rect box_col_h();
     Rect box_col_v();
 
+    int width, height;
+    float jump_speed, max_speed;
+    float ground_accel, air_accel;
+    std::string jump_sample;
+
     int accel_x;
     float velo_x, velo_y, pos_x, pos_y;
-    bool jump;
+    bool jumping;
     Facing facing;
 };
