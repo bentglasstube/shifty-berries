@@ -75,7 +75,7 @@ void GameScreen::draw(Graphics& graphics) {
 
   if (shapeshift_timer > 0) {
     char buffer[3];
-    snprintf(buffer, 3, "%2d", shapeshift_timer / 1000);
+    snprintf(buffer, 3, "%2d", (shapeshift_timer + 999) / 1000);
     text->draw(graphics, buffer, graphics.get_width() - 16, 16, Text::Alignment::RIGHT);
   }
 }
