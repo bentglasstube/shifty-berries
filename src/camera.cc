@@ -20,7 +20,7 @@ float _window(float min, float max, float focus, float size) {
   return target;
 }
 
-void Camera::update(unsigned int elapsed, Player player, Map map) {
+void Camera::update(unsigned int elapsed, Player player, Map& map) {
   float tx = _window(0, map.pixel_width(), player.x_position(), kWidth);
   if (ox > tx) ox = std::max(ox - kMaxSpeed * elapsed, tx);
   if (ox < tx) ox = std::min(ox + kMaxSpeed * elapsed, tx);

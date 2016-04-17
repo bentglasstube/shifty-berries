@@ -1,5 +1,7 @@
 #include "goat.h"
 
+#include <math.h>
+
 Goat::Goat() : Player(),
   pushing(false),
   walking("sprites", 0, 32, 16, 16, 4, 14),
@@ -12,6 +14,11 @@ void Goat::start_jumping(Audio& audio) {
     velo_y = -get_jump_speed();
     audio.play_sample("goat-jump");
   }
+}
+
+void Goat::push_crate(Map& map, Map::Tile tile) {
+  // only push on the ground when moving slowly
+  if (on_ground() && velo_x < 0.1 && velo_x > -0.1) map.push_tile(tile, velo_x);
 }
 
 Sprite* Goat::get_sprite() {

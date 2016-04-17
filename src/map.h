@@ -7,6 +7,7 @@
 #include "rect.h"
 #include "sign.h"
 #include "spritemap.h"
+#include "text.h"
 
 class Map {
   public:
@@ -24,8 +25,9 @@ class Map {
     void draw(Graphics& graphics, int x_offset, int y_offset);
     void update(Rect player);
 
-    Tile tile_at(float x, float y);
+    void push_tile(Map::Tile tile, float dx);
 
+    Tile tile_at(float x, float y);
     Tile collision(Rect box, float dx, float dy);
 
     int pixel_width() { return width * 16; }
@@ -35,6 +37,7 @@ class Map {
     typedef std::vector<std::shared_ptr<Sign>> SignSet;
 
     SpriteMap tileset;
+    Text text;
     int height, width;
     char tiles[128][1024];
 

@@ -8,6 +8,7 @@ class Goat : public Player {
     Goat();
 
     void start_jumping(Audio& audio);
+    void push_crate(Map& map, Map::Tile tile);
 
   private:
     int get_width()  { return 16; }

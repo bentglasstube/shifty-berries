@@ -6,7 +6,7 @@ namespace {
   const Map::Tile kNullTile {};
 }
 
-Map::Map() : tileset("map", 6, 16, 16) {}
+Map::Map() : tileset("map", 6, 16, 16), text("text") {}
 
 void Map::load(std::string file) {
   const std::string path("content/" + file + ".txt");
@@ -54,6 +54,11 @@ void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
       } else if (t >= 'a' && t <= 'z') {
         tileset.draw(graphics, t - 'a' + 26, gx, gy);
       }
+
+      // Draw map data for debugging
+      /* char buffer[2]; */
+      /* snprintf(buffer, 2, "%c", t); */
+      /* text.draw(graphics, buffer, gx, gy); */
     }
   }
 
@@ -67,6 +72,18 @@ void Map::update(Rect player) {
   for (SignSet::iterator i = signs.begin(); i != signs.end(); ++i) {
     std::shared_ptr<Sign> sign = *i;
     sign->set_visibility(sign->collision(player));
+  }
+}
+
+void Map::push_tile(Map::Tile tile, float dx) {
+  int tx = (int) (tile.left + tile.right) / 32;
+  int ty = (int) (tile.top + tile.bottom) / 32;
+
+  int nx = dx < 0 ? tx - 1 : tx + 1;
+
+  if (tiles[ty][nx] == '.') {
+    tiles[ty][nx] = tiles[ty][tx];
+    tiles[ty][tx] = '.';
   }
 }
 

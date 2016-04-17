@@ -12,7 +12,7 @@ class Player {
 
     Player();
 
-    void update(unsigned int elapsed, Map map, Audio& audio);
+    void update(unsigned int elapsed, Map& map, Audio& audio);
     void draw(Graphics& graphics, int x_offset, int y_offset);
 
     virtual void start_moving_left();
@@ -21,6 +21,8 @@ class Player {
 
     virtual void start_jumping(Audio& audio) = 0;
     virtual void stop_jumping();
+
+    virtual void push_crate(Map&, Map::Tile) {};
 
     void set_position(float x, float y, Facing f = Facing::RIGHT);
 
@@ -45,8 +47,8 @@ class Player {
 
     bool on_ground() const;
 
-    void update_x(unsigned int elapsed, Map map);
-    void update_y(unsigned int elapsed, Map map, Audio& audio);
+    void update_x(unsigned int elapsed, Map& map);
+    void update_y(unsigned int elapsed, Map& map, Audio& audio);
 
     Rect box_col_h();
     Rect box_col_v();

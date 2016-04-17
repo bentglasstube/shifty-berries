@@ -5,7 +5,7 @@
 Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
   jump(false), facing(RIGHT) {}
 
-void Player::update(unsigned int elapsed, Map map, Audio& audio) {
+void Player::update(unsigned int elapsed, Map& map, Audio& audio) {
   if (elapsed > 50) elapsed = 50;
   update_x(elapsed, map);
   update_y(elapsed, map, audio);
@@ -65,7 +65,7 @@ bool Player::on_ground() const {
   return velo_y == 0;
 }
 
-void Player::update_x(unsigned int elapsed, Map map) {
+void Player::update_x(unsigned int elapsed, Map& map) {
   velo_x += accel_x * (on_ground() ? get_ground_accel() : get_air_accel()) * elapsed;
 
   if (on_ground()) {
@@ -78,7 +78,7 @@ void Player::update_x(unsigned int elapsed, Map map) {
 
   Map::Tile t = map.collision(box_col_h(), velo_x * elapsed, 0);
   if (t.obstruction) {
-    // TODO handle any interactions
+    if (t.c == 'Z') push_crate(map, t);
     if (velo_x > 0) pos_x = t.left - get_width() / 2;
     else pos_x = t.right + get_width() / 2;
     velo_x = 0;
@@ -92,7 +92,7 @@ void Player::update_x(unsigned int elapsed, Map map) {
   }
 }
 
-void Player::update_y(unsigned int elapsed, Map map, Audio& audio) {
+void Player::update_y(unsigned int elapsed, Map& map, Audio& audio) {
   velo_y = ConstAccelerator::kGravity.update_velocity(velo_y, elapsed);
 
   Map::Tile t = map.collision(box_col_v(), 0, velo_y * elapsed);
