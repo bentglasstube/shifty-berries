@@ -2,11 +2,6 @@
 
 #include "accelerators.h"
 
-namespace {
-  const float kGravity          = 0.0012f;
-  const float kTerminalVelocity = 0.5f;
-}
-
 Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
   jump(false), facing(RIGHT) {}
 
@@ -98,7 +93,7 @@ void Player::update_x(unsigned int elapsed, Map map) {
 }
 
 void Player::update_y(unsigned int elapsed, Map map, Audio& audio) {
-  velo_y = ConstAccelerator(kGravity, kTerminalVelocity).update_velocity(velo_y, elapsed);
+  velo_y = ConstAccelerator::kGravity.update_velocity(velo_y, elapsed);
 
   Map::Tile t = map.collision(box_col_v(), 0, velo_y * elapsed);
   if (t.obstruction) {
