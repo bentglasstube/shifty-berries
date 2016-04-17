@@ -13,7 +13,9 @@ void Map::load(std::string file) {
   FILE* fd = fopen(path.c_str(), "r");
   char line[1024];
 
-  // TODO read height
+  // TODO read metadata
+  start_x = 2;
+  start_y = 26;
   height = 0;
 
   fprintf(stderr, "Loading map: %s\n", file.c_str());
@@ -28,9 +30,9 @@ void Map::load(std::string file) {
   // TODO read signs
   // for now just manually add the sign
   signs = SignSet();
-  signs.push_back(std::shared_ptr<Sign>(new Sign(2, 27, "Arrows to move, space to jump")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(2, 27, "Use a and d to move, space to jump")));
   signs.push_back(std::shared_ptr<Sign>(new Sign(65, 12, "Do not eat my berries!")));
-  signs.push_back(std::shared_ptr<Sign>(new Sign(69, 12, "Press shift to eat berries.")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(69, 12, "Press j to eat berries.")));
 
   // TODO read player starting posision
 

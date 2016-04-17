@@ -23,6 +23,7 @@ class GameScreen : public Screen {
   private:
     enum Animal { HUMAN, GOAT, BIRD };
 
+    void load_level(std::string level);
     void shapeshift(Animal animal, int duration);
 
     std::unique_ptr<Player> player;

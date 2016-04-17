@@ -8,7 +8,7 @@ namespace {
   // TODO get from graphics class
   const int kWidth = 640;
   const int kHeight = 480;
-  const float kMaxSpeed = 0.5f;
+  const float kMaxSpeed = 1.0f;
 }
 
 float _window(float min, float max, float focus, float size) {

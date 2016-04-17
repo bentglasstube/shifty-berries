@@ -8,9 +8,7 @@ void GameScreen::init() {
   current_form = GameScreen::Animal::HUMAN;
   player.reset(new Human());
   text.reset(new Text("text"));
-  player->set_position(32, 432);
-  map.load("test");
-  backdrop.reset(new ParallaxBackdrop("outside-day"));
+  load_level("test");
 }
 
 bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
@@ -29,7 +27,7 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   if (input.key_pressed(SDLK_SPACE)) player->jump(audio);
 
   // TODO put this somewhere sane
-  if (input.key_pressed(SDLK_RSHIFT)) {
+  if (input.key_pressed(SDLK_j)) {
     if (current_form == GameScreen::Animal::HUMAN) {
       Map::Tile tile = map.tile_at(player->x_position(), player->y_position() - 4);
 
@@ -63,6 +61,12 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     }
   }
 
+  if (player->y_position() > map.pixel_height() + 50) {
+    shapeshift(GameScreen::Animal::HUMAN, 0);
+    audio.play_sample("death");
+    load_level("test");
+  }
+
   return true;
 }
 
@@ -80,6 +84,12 @@ void GameScreen::draw(Graphics& graphics) {
 
 Screen* GameScreen::next_screen() {
   return NULL;
+}
+
+void GameScreen::load_level(std::string level) {
+  map.load(level);
+  player->set_position(map.player_x(), map.player_y());
+  backdrop.reset(new ParallaxBackdrop("outside-day"));
 }
 
 void GameScreen::shapeshift(GameScreen::Animal animal, int duration) {

@@ -33,12 +33,16 @@ class Map {
     int pixel_width() { return width * 16; }
     int pixel_height() { return height * 16; }
 
+    int player_x() { return start_x * 16 - 8; }
+    int player_y() { return start_y * 16 + 16; }
+
   private:
     typedef std::vector<std::shared_ptr<Sign>> SignSet;
 
     SpriteMap tileset;
     Text text;
     int height, width;
+    int start_x, start_y;
     char tiles[128][1024];
 
     Tile tile(int x, int y);

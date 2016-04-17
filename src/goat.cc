@@ -9,7 +9,7 @@ Goat::Goat() : Player(),
   jump_speed = 0.25f;
   ground_accel = 0.0004f;
   air_accel = 0.0002f;
-  max_speed = 0.23f;
+  max_speed = 0.28f;
 
   jump_sample = "goat-jump";
 }
