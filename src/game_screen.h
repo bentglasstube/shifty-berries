@@ -18,7 +18,12 @@ class GameScreen : public Screen {
     std::string get_music_track() { return ""; }
 
   private:
+    enum Animal { HUMAN, GOAT, BIRD };
+
+    void shapeshift(Animal animal);
+
     std::unique_ptr<Player> player;
+    Animal current_form;
     Map map;
     Camera camera;
 };

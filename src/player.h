@@ -12,12 +12,12 @@ class Player {
     void update(unsigned int elapsed, Map map);
     void draw(Graphics& graphics, int x_offset, int y_offset);
 
-    void start_moving_left();
-    void start_moving_right();
-    void stop_moving();
+    virtual void start_moving_left();
+    virtual void start_moving_right();
+    virtual void stop_moving();
 
-    void start_jumping();
-    void stop_jumping();
+    virtual void start_jumping();
+    virtual void stop_jumping();
 
     void set_position(float x, float y);
 

@@ -56,6 +56,12 @@ void Graphics::clear() {
   SDL_RenderClear(renderer);
 }
 
+void Graphics::rect(int x, int y, int w, int h, Uint8 red, Uint8 green, Uint8 blue) {
+  SDL_Rect r = {x, y, w, h};
+  SDL_SetRenderDrawColor(renderer, red, green, blue, 32);
+  SDL_RenderFillRect(renderer, &r);
+}
+
 SDL_Texture* Graphics::load_image(const std::string& file) {
   const std::string path("content/" + file+ ".bmp");
   if (textures.count(path) == 0) {

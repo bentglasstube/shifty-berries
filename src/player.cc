@@ -17,6 +17,23 @@ void Player::update(unsigned int elapsed, Map map) {
 }
 
 void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
+  /* // Display collision boxes for debugging */
+  /* Rect bch = box_col_h(); */
+  /* graphics.rect( */
+  /*     (int)(bch.left - x_offset), */
+  /*     (int)(bch.top - y_offset), */
+  /*     (int)(bch.right - bch.left), */
+  /*     (int)(bch.bottom - bch.top), */
+  /*     255, 0, 0); */
+
+  /* Rect bcv = box_col_v(); */
+  /* graphics.rect( */
+  /*     (int)(bcv.left - x_offset), */
+  /*     (int)(bcv.top - y_offset), */
+  /*     (int)(bcv.right - bcv.left), */
+  /*     (int)(bcv.bottom - bcv.top), */
+  /*     0, 0, 255); */
+
   Graphics::FlipDirection dir = facing == LEFT ? Graphics::FlipDirection::HORIZONTAL : Graphics::FlipDirection::NONE;
   get_sprite()->draw(graphics, pos_x - get_width() / 2 - x_offset, pos_y - get_height() - y_offset, dir);
 }
@@ -91,5 +108,18 @@ void Player::update_y(unsigned int elapsed, Map map) {
   }
 }
 
-Rect Player::box_col_h() { return Rect(pos_x - get_width() / 2, pos_y - get_height() + 2, pos_x + get_width() / 2, pos_y - 2); }
-Rect Player::box_col_v() { return Rect(pos_x - get_width() + 2, pos_y - get_height(), pos_x + get_width() - 2, pos_y); }
+Rect Player::box_col_h() {
+  return Rect(
+      pos_x - get_width() / 2,
+      pos_y - get_height() + 4,
+      pos_x + get_width() / 2,
+      pos_y - 4);
+}
+
+Rect Player::box_col_v() {
+  return Rect(
+      pos_x - get_width() / 2 + 2,
+      pos_y - get_height(),
+      pos_x + get_width() / 2 - 2,
+      pos_y);
+}
