@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audio.h"
 #include "map.h"
 #include "rect.h"
 #include "sprite.h"
@@ -9,14 +10,14 @@ class Player {
 
     Player();
 
-    void update(unsigned int elapsed, Map map);
+    void update(unsigned int elapsed, Map map, Audio& audio);
     void draw(Graphics& graphics, int x_offset, int y_offset);
 
     virtual void start_moving_left();
     virtual void start_moving_right();
     virtual void stop_moving();
 
-    virtual void start_jumping();
+    virtual void start_jumping(Audio& audio) = 0;
     virtual void stop_jumping();
 
     void set_position(float x, float y);
@@ -41,7 +42,7 @@ class Player {
     bool on_ground() const;
 
     void update_x(unsigned int elapsed, Map map);
-    void update_y(unsigned int elapsed, Map map);
+    void update_y(unsigned int elapsed, Map map, Audio& audio);
 
     Rect box_col_h();
     Rect box_col_v();

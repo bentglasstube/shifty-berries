@@ -27,12 +27,13 @@ void Bird::stop_moving() {
   accel_x = 0;
 }
 
-void Bird::start_jumping() {
-  if (velo_y >= 0.0f) velo_y = -get_jump_speed();
+void Bird::start_jumping(Audio& audio) {
+  if (velo_y >= 0.0f) {
+    velo_y = -get_jump_speed();
+    audio.play_sample("bird-jump");
+  }
 }
 
 void Bird::stop_jumping() {
-  fprintf(stderr, "Bird land\n");
   accel_x = 0;
 }
-

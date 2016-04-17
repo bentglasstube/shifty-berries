@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "audio.h"
 #include "camera.h"
 #include "map.h"
 #include "player.h"
@@ -20,7 +21,7 @@ class GameScreen : public Screen {
   private:
     enum Animal { HUMAN, GOAT, BIRD };
 
-    void shapeshift(Animal animal);
+    void shapeshift(Audio& audio, Animal animal);
 
     std::unique_ptr<Player> player;
     Animal current_form;

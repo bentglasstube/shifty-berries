@@ -7,6 +7,8 @@ class Goat : public Player {
   public:
     Goat();
 
+    void start_jumping(Audio& audio);
+
   private:
     int get_width()  { return 16; }
     int get_height() { return 16; }

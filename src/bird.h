@@ -11,7 +11,7 @@ class Bird : public Player {
     void start_moving_right();
     void stop_moving();
 
-    void start_jumping();
+    void start_jumping(Audio& audio);
     void stop_jumping();
 
   private:

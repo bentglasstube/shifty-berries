@@ -10,10 +10,10 @@ namespace {
 Player::Player() : accel_x(0), velo_x(0), velo_y(0), pos_x(0), pos_y(0),
   jump(false), facing(RIGHT) {}
 
-void Player::update(unsigned int elapsed, Map map) {
+void Player::update(unsigned int elapsed, Map map, Audio& audio) {
   if (elapsed > 50) elapsed = 50;
   update_x(elapsed, map);
-  update_y(elapsed, map);
+  update_y(elapsed, map, audio);
 }
 
 void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
@@ -50,13 +50,6 @@ void Player::start_moving_right() {
 
 void Player::stop_moving() {
   accel_x = 0;
-}
-
-void Player::start_jumping() {
-  if (!jump) {
-    jump = true;
-    velo_y = -get_jump_speed();
-  }
 }
 
 void Player::stop_jumping() {
@@ -102,7 +95,7 @@ void Player::update_x(unsigned int elapsed, Map map) {
   }
 }
 
-void Player::update_y(unsigned int elapsed, Map map) {
+void Player::update_y(unsigned int elapsed, Map map, Audio& audio) {
   velo_y = ConstAccelerator(kGravity, kTerminalVelocity).update_velocity(velo_y, elapsed);
 
   Map::Tile t = map.collision(box_col_v(), 0, velo_y * elapsed);
@@ -110,6 +103,7 @@ void Player::update_y(unsigned int elapsed, Map map) {
     if (velo_y > 0){
       pos_y = t.top;
       stop_jumping();
+      if (velo_y > 0.1) audio.play_sample("bump");
     } else {
       pos_y = t.bottom + get_height();
     }

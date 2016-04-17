@@ -6,6 +6,14 @@ Goat::Goat() : Player(),
   ramming("sprites", 0, 48, 16, 16, 4, 14),
   standing("sprites", 16, 32, 16, 16) {}
 
+void Goat::start_jumping(Audio& audio) {
+  if (!jump) {
+    jump = true;
+    velo_y = -get_jump_speed();
+    audio.play_sample("goat-jump");
+  }
+}
+
 // TODO allow goats to push crates
 
 Sprite* Goat::get_sprite() {

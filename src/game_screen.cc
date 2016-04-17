@@ -11,7 +11,7 @@ void GameScreen::init() {
   map.load("test");
 }
 
-bool GameScreen::update(Input& input, Audio&, Graphics&, unsigned int elapsed) {
+bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
   if (input.key_pressed(SDLK_ESCAPE)) return false;
 
   if (input.key_held(SDLK_a) && input.key_held(SDLK_d)) {
@@ -25,15 +25,15 @@ bool GameScreen::update(Input& input, Audio&, Graphics&, unsigned int elapsed) {
   }
 
   if (input.key_pressed(SDLK_SPACE)) {
-    player->start_jumping();
+    player->start_jumping(audio);
   }
 
   // TODO remove
-  if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT);
-  if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN);
-  if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD);
+  if (input.key_pressed(SDLK_g)) shapeshift(audio, GameScreen::Animal::GOAT);
+  if (input.key_pressed(SDLK_h)) shapeshift(audio, GameScreen::Animal::HUMAN);
+  if (input.key_pressed(SDLK_b)) shapeshift(audio, GameScreen::Animal::BIRD);
 
-  player->update(elapsed, map);
+  player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
 
   return true;
@@ -48,9 +48,11 @@ Screen* GameScreen::next_screen() {
   return NULL;
 }
 
-void GameScreen::shapeshift(GameScreen::Animal animal) {
+void GameScreen::shapeshift(Audio& audio, GameScreen::Animal animal) {
   if (current_form != animal) {
     current_form = animal;
+
+    audio.play_sample("shift");
 
     float x = player->x_position();
     float y = player->y_position();
