@@ -8,6 +8,8 @@
 class Player {
   public:
 
+    enum Facing { LEFT, RIGHT };
+
     Player();
 
     void update(unsigned int elapsed, Map map, Audio& audio);
@@ -20,14 +22,14 @@ class Player {
     virtual void start_jumping(Audio& audio) = 0;
     virtual void stop_jumping();
 
-    void set_position(float x, float y);
+    void set_position(float x, float y, Facing f = Facing::RIGHT);
 
-    float x_position();
-    float y_position();
+    float x_position() { return pos_x; }
+    float y_position() { return pos_y; }
+
+    Facing get_facing() { return facing; }
 
   protected:
-
-    enum Facing { LEFT, RIGHT };
 
     virtual Sprite* get_sprite() = 0;
 

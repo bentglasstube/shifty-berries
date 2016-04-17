@@ -58,6 +58,7 @@ void GameScreen::shapeshift(Audio& audio, GameScreen::Animal animal) {
 
     float x = player->x_position();
     float y = player->y_position();
+    Player::Facing facing = player->get_facing();
 
     switch (animal) {
       case HUMAN: player.reset(new Human()); break;
@@ -65,6 +66,6 @@ void GameScreen::shapeshift(Audio& audio, GameScreen::Animal animal) {
       case BIRD:  player.reset(new Bird()); break;
     }
 
-    player->set_position(x, y);
+    player->set_position(x, y, facing);
   }
 }

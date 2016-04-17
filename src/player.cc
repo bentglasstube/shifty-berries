@@ -56,17 +56,10 @@ void Player::stop_jumping() {
   jump = false;
 }
 
-void Player::set_position(float x, float y) {
+void Player::set_position(float x, float y, Player::Facing f) {
   pos_x = x;
   pos_y = y;
-}
-
-float Player::x_position() {
-  return pos_x;
-}
-
-float Player::y_position() {
-  return pos_y;
+  facing = f;
 }
 
 bool Player::on_ground() const {
