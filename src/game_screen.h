@@ -5,6 +5,7 @@
 #include "audio.h"
 #include "camera.h"
 #include "map.h"
+#include "parallax_backdrop.h"
 #include "player.h"
 #include "screen.h"
 
@@ -24,6 +25,7 @@ class GameScreen : public Screen {
     void shapeshift(Audio& audio, Animal animal);
 
     std::unique_ptr<Player> player;
+    std::unique_ptr<ParallaxBackdrop> backdrop;
     Animal current_form;
     Map map;
     Camera camera;

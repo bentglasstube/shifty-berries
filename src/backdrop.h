@@ -5,16 +5,10 @@
 #include "graphics.h"
 
 class Backdrop {
-
   public:
-
-    Backdrop(const std::string& file);
-
+    Backdrop(const std::string& file) : file(file) {}
     void draw(Graphics& graphics);
-    virtual void update() {}
 
   private:
-
     std::string file;
-
 };

@@ -7,7 +7,7 @@
 class Graphics {
   public:
 
-    Graphics();
+    Graphics(int width, int height);
     ~Graphics();
 
     enum FlipDirection { NONE, HORIZONTAL, VERTICAL, BOTH };
@@ -18,10 +18,14 @@ class Graphics {
 
     void rect(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b);
 
+    int get_width() { return width; }
+    int get_height() { return height; }
+
     SDL_Texture* load_image(const std::string& file);
 
   private:
 
+    int width, height;
     typedef std::map<std::string, SDL_Texture*> TextureMap;
     TextureMap textures;
     SDL_Window* window;

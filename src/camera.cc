@@ -5,6 +5,7 @@
 Camera::Camera() : ox(0), oy(0) {}
 
 namespace {
+  // TODO get from graphics class
   const int kWidth = 640;
   const int kHeight = 480;
   const float kMaxSpeed = 0.5f;

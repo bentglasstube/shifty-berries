@@ -9,6 +9,7 @@ void GameScreen::init() {
   player.reset(new Human());
   player->set_position(32, 432);
   map.load("test");
+  backdrop.reset(new ParallaxBackdrop("outside-day"));
 }
 
 bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
@@ -40,6 +41,7 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
 }
 
 void GameScreen::draw(Graphics& graphics) {
+  backdrop->draw(graphics, camera.x_offset());
   map.draw(graphics, camera.x_offset(), camera.y_offset());
   player->draw(graphics, camera.x_offset(), camera.y_offset());
 }

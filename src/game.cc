@@ -25,7 +25,7 @@ Game::~Game() {
 }
 
 void Game::loop() {
-  Graphics graphics;
+  Graphics graphics(640, 480);
   Audio audio;
   Input input;
 

@@ -1,13 +1,7 @@
 #include "graphics.h"
 
 #include "game.h"
-
-namespace {
-  const unsigned int width = 640;
-  const unsigned int height = 480;
-}
-
-Graphics::Graphics() {
+Graphics::Graphics(int width, int height) : width(width), height(height) {
   // int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP;
   int flags = SDL_WINDOW_OPENGL;
 
