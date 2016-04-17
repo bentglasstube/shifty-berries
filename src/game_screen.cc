@@ -7,6 +7,7 @@
 void GameScreen::init() {
   current_form = GameScreen::Animal::HUMAN;
   player.reset(new Human());
+  text.reset(new Text("text"));
   player->set_position(32, 432);
   map.load("test");
   backdrop.reset(new ParallaxBackdrop("outside-day"));
@@ -29,15 +30,40 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     player->start_jumping(audio);
   }
 
+  // TODO put this somewhere sane
+  if (input.key_pressed(SDLK_RSHIFT)) {
+    if (current_form == GameScreen::Animal::HUMAN) {
+      Map::Tile tile = map.tile_at(player->x_position(), player->y_position() - 4);
+
+      fprintf(stderr, "Interacting with %c\n", tile.c);
+
+      if (tile.c == 'g') {
+        shapeshift(GameScreen::Animal::GOAT, 15);
+        audio.play_sample("shift");
+      } else if (tile.c == 'h') {
+        shapeshift(GameScreen::Animal::BIRD, 10);
+        audio.play_sample("shift");
+      }
+    }
+  }
+
   // TODO remove
-  if (input.key_pressed(SDLK_g)) shapeshift(audio, GameScreen::Animal::GOAT);
-  if (input.key_pressed(SDLK_h)) shapeshift(audio, GameScreen::Animal::HUMAN);
-  if (input.key_pressed(SDLK_b)) shapeshift(audio, GameScreen::Animal::BIRD);
+  if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT, 0);
+  if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN, 0);
+  if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD, 0);
 
   player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
 
   map.update(player->bounding_box());
+
+  if (shapeshift_timer > 0) {
+    shapeshift_timer -= elapsed;
+    if (shapeshift_timer <= 0) {
+      audio.play_sample("unshift");
+      shapeshift(GameScreen::Animal::HUMAN, 0);
+    }
+  }
 
   return true;
 }
@@ -46,17 +72,23 @@ void GameScreen::draw(Graphics& graphics) {
   backdrop->draw(graphics, camera.x_offset());
   map.draw(graphics, camera.x_offset(), camera.y_offset());
   player->draw(graphics, camera.x_offset(), camera.y_offset());
+
+  if (shapeshift_timer > 0) {
+    char buffer[3];
+    snprintf(buffer, 3, "%2d", shapeshift_timer / 1000);
+    text->draw(graphics, buffer, graphics.get_width() - 16, 16, Text::Alignment::RIGHT);
+  }
 }
 
 Screen* GameScreen::next_screen() {
   return NULL;
 }
 
-void GameScreen::shapeshift(Audio& audio, GameScreen::Animal animal) {
+void GameScreen::shapeshift(GameScreen::Animal animal, int duration) {
   if (current_form != animal) {
-    current_form = animal;
+    shapeshift_timer = 1000 * duration;
 
-    audio.play_sample("shift");
+    current_form = animal;
 
     float x = player->x_position();
     float y = player->y_position();

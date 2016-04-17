@@ -96,6 +96,7 @@ Map::Tile Map::tile(int x, int y) {
   char t = tiles[y][x];
 
   Tile tile;
+  tile.c = t;
 
   if (t >= 'A' && t <= 'Z') {
     tile.obstruction = true;

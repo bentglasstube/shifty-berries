@@ -12,6 +12,7 @@ class Map {
   public:
 
     struct Tile {
+      char c;
       bool obstruction;
       float friction;
       float top, left, right, bottom;
