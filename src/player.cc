@@ -17,7 +17,7 @@ void Player::update(unsigned int elapsed, Map map) {
 }
 
 void Player::draw(Graphics& graphics, int x_offset, int y_offset) {
-  /* // Display collision boxes for debugging */
+  // Display collision boxes for debugging
   /* Rect bch = box_col_h(); */
   /* graphics.rect( */
   /*     (int)(bch.left - x_offset), */
@@ -53,7 +53,7 @@ void Player::stop_moving() {
 }
 
 void Player::start_jumping() {
-  if (velo_y == 0) {
+  if (!jump) {
     jump = true;
     velo_y = -get_jump_speed();
   }
@@ -91,7 +91,11 @@ void Player::update_x(unsigned int elapsed, Map map) {
     if (accel_x != 0) velo_x = ConstAccelerator(accel_x * get_air_accel(), accel_x * get_max_speed()).update_velocity(velo_x, elapsed);
   }
 
-  if (map.collision(box_col_h(), velo_x * elapsed, 0)) {
+  Map::Tile t = map.collision(box_col_h(), velo_x * elapsed, 0);
+  if (t.obstruction) {
+    // TODO handle any interactions
+    if (velo_x > 0) pos_x = t.left - get_width() / 2;
+    else pos_x = t.right + get_width() / 2;
     velo_x = 0;
   } else {
     pos_x += velo_x * elapsed;
@@ -101,7 +105,14 @@ void Player::update_x(unsigned int elapsed, Map map) {
 void Player::update_y(unsigned int elapsed, Map map) {
   velo_y = ConstAccelerator(kGravity, kTerminalVelocity).update_velocity(velo_y, elapsed);
 
-  if (map.collision(box_col_v(), 0, velo_y * elapsed)) {
+  Map::Tile t = map.collision(box_col_v(), 0, velo_y * elapsed);
+  if (t.obstruction) {
+    if (velo_y > 0){
+      pos_y = t.top;
+      stop_jumping();
+    } else {
+      pos_y = t.bottom + get_height();
+    }
     velo_y = 0;
   } else {
     pos_y += velo_y * elapsed;

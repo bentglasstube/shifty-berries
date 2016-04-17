@@ -2,6 +2,10 @@
 
 #include <stdio.h>
 
+namespace {
+  const Map::Tile kNullTile {};
+}
+
 Map::Map() : tileset("map", 6, 16, 16) {}
 
 void Map::load(std::string file) {
@@ -48,7 +52,7 @@ Map::Tile Map::tile_at(float x, float y) {
   return tile((int)x / 16, (int)y / 16);
 }
 
-bool Map::collision(Rect box, float dx, float dy) {
+Map::Tile Map::collision(Rect box, float dx, float dy) {
   if (dx != 0) {
     int x = (int) ((dx < 0 ? box.left : box.right) + dx) / 16;
     int top = (int) box.top / 16;
@@ -63,7 +67,7 @@ bool Map::collision(Rect box, float dx, float dy) {
     return check_tile_range(left, right, y, y);
   }
 
-  return false;
+  return kNullTile;
 }
 
 Map::Tile Map::tile(int x, int y) {
@@ -78,15 +82,22 @@ Map::Tile Map::tile(int x, int y) {
     tile.obstruction = false;
   }
 
+  tile.top = y * 16;
+  tile.bottom = tile.top + 16;
+
+  tile.left = x * 16;
+  tile.right = tile.left + 16;
+
   return tile;
 }
 
-bool Map::check_tile_range(int x1, int x2, int y1, int y2) {
+Map::Tile Map::check_tile_range(int x1, int x2, int y1, int y2) {
   for (int y = y1; y <= y2; ++y) {
     for (int x = x1; x <= x2; ++x) {
       Tile t = tile(x, y);
-      if (t.obstruction) return true;
+      if (t.obstruction) return t;
     }
   }
-  return false;
+
+  return kNullTile;
 }

@@ -10,6 +10,7 @@ class Map {
     struct Tile {
       bool obstruction;
       float friction;
+      float top, left, right, bottom;
     };
 
     Map();
@@ -19,7 +20,7 @@ class Map {
 
     Tile tile_at(float x, float y);
 
-    bool collision(Rect box, float dx, float dy);
+    Tile collision(Rect box, float dx, float dy);
 
     int pixel_width() { return width * 16; }
     int pixel_height() { return height * 16; }
@@ -30,5 +31,5 @@ class Map {
     char tiles[128][1024];
 
     Tile tile(int x, int y);
-    bool check_tile_range(int x1, int x2, int y1, int y2);
+    Tile check_tile_range(int x1, int x2, int y1, int y2);
 };
