@@ -1,17 +1,17 @@
 #include "human.h"
 
+Human::Human() : Player(),
+  walking("sprites", 0, 0, 16, 32, 4, 14),
+  standing("sprites", 0, 0, 16, 32),
+  crouching("sprites", 64, 0, 16, 32) {}
+
 void Human::start_jumping(Audio& audio) {
-  if (!jump) {
+  if (on_ground()) {
     jump = true;
     velo_y = -get_jump_speed();
     audio.play_sample("human-jump");
   }
 }
-
-Human::Human() : Player(),
-  walking("sprites", 0, 0, 16, 32, 4, 14),
-  standing("sprites", 0, 0, 16, 32),
-  crouching("sprites", 64, 0, 16, 32) {}
 
 Sprite* Human::get_sprite() {
   if ((jump && velo_y < 0)) return &crouching;

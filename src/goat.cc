@@ -7,14 +7,12 @@ Goat::Goat() : Player(),
   standing("sprites", 16, 32, 16, 16) {}
 
 void Goat::start_jumping(Audio& audio) {
-  if (!jump) {
+  if (on_ground()) {
     jump = true;
     velo_y = -get_jump_speed();
     audio.play_sample("goat-jump");
   }
 }
-
-// TODO allow goats to push crates
 
 Sprite* Goat::get_sprite() {
   if (jump || !on_ground()) return &standing;
