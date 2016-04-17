@@ -11,30 +11,26 @@ Map::Map() : tileset("map", 6, 16, 16), text("text") {}
 void Map::load(std::string file) {
   const std::string path("content/" + file + ".txt");
   FILE* fd = fopen(path.c_str(), "r");
-  char line[1024];
 
-  // TODO read metadata
-  start_x = 2;
-  start_y = 26;
-  height = 0;
+  name = file;
 
-  fprintf(stderr, "Loading map: %s\n", file.c_str());
-  while (fgets(line, sizeof(line), fd)) {
-    width = strlen(line) - 1;
-    strncpy(tiles[height], line, width);
-    height++;
+  {
+    char a[32], b[32];
+    fscanf(fd, "%d %d %d %32s %32s\n", &start_x, &start_y, &height, a, b);
+    next = a;
+    bg = b;
   }
 
-  fprintf(stderr, "Read map as %d x %d\n", width, height);
+  for (int y = 0; y < height; ++y) fgets(tiles[y], sizeof(tiles[y]), fd);
+  width = strlen(tiles[0]) - 1;
 
-  // TODO read signs
-  // for now just manually add the sign
-  signs = SignSet();
-  signs.push_back(std::shared_ptr<Sign>(new Sign(2, 27, "Use a and d to move, space to jump")));
-  signs.push_back(std::shared_ptr<Sign>(new Sign(65, 12, "Do not eat my berries!")));
-  signs.push_back(std::shared_ptr<Sign>(new Sign(69, 12, "Press j to eat berries.")));
-
-  // TODO read player starting posision
+  {
+    int x, y;
+    char t[100];
+    while (fscanf(fd, "%d %d %100[^\n]\n", &x, &y, t) != EOF) {
+      signs.push_back(std::shared_ptr<Sign>(new Sign(x, y, t)));
+    }
+  }
 
   fclose(fd);
 }

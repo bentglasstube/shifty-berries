@@ -64,7 +64,14 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   if (player->y_position() > map.pixel_height() + 50) {
     shapeshift(GameScreen::Animal::HUMAN, 0);
     audio.play_sample("death");
-    load_level("test");
+    load_level(map.current_level());
+  }
+
+  if (player->x_position() > map.pixel_width() + 8) {
+    shapeshift(GameScreen::Animal::HUMAN, 0);
+    audio.play_sample("next");
+    load_level(map.next_level());
+    camera.reset();
   }
 
   return true;
@@ -78,7 +85,7 @@ void GameScreen::draw(Graphics& graphics) {
   if (shapeshift_timer > 0) {
     char buffer[3];
     snprintf(buffer, 3, "%2d", (shapeshift_timer + 999) / 1000);
-    text->draw(graphics, buffer, graphics.get_width() - 16, 16, Text::Alignment::RIGHT);
+    text->draw(graphics, buffer, graphics.get_width() / 2, graphics.get_height() - 32, Text::Alignment::CENTER);
   }
 }
 
@@ -89,7 +96,7 @@ Screen* GameScreen::next_screen() {
 void GameScreen::load_level(std::string level) {
   map.load(level);
   player->set_position(map.player_x(), map.player_y());
-  backdrop.reset(new ParallaxBackdrop("outside-day"));
+  backdrop.reset(new ParallaxBackdrop(map.background()));
 }
 
 void GameScreen::shapeshift(GameScreen::Animal animal, int duration) {

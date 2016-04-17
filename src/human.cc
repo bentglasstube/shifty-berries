@@ -11,7 +11,7 @@ Human::Human() : Player(),
   jump_speed = 0.35f;
   ground_accel = 0.0005f;
   air_accel = 0.0003f;
-  max_speed = 0.15f;
+  max_speed = 0.14f;
 
   jump_sample = "human-jump";
 }

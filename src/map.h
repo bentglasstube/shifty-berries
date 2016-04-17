@@ -36,6 +36,10 @@ class Map {
     int player_x() { return start_x * 16 - 8; }
     int player_y() { return start_y * 16 + 16; }
 
+    std::string current_level() { return name; }
+    std::string next_level() { return next; }
+    std::string background() { return bg; }
+
   private:
     typedef std::vector<std::shared_ptr<Sign>> SignSet;
 
@@ -44,6 +48,7 @@ class Map {
     int height, width;
     int start_x, start_y;
     char tiles[128][1024];
+    std::string name, next, bg;
 
     Tile tile(int x, int y);
     Tile check_tile_range(int x1, int x2, int y1, int y2);
