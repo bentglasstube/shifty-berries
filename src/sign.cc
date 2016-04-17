@@ -12,10 +12,10 @@ void Sign::draw(Graphics& graphics) {
 }
 
 bool Sign::collision(Rect box) {
-  if (box.left > x * 16 + 16) return false;
-  if (box.right < x * 16) return false;
-  if (box.top > y * 16 + 16) return false;
-  if (box.bottom < y * 16) return false;
+  if (box.left > x * 16) return false;
+  if (box.right < x * 16 - 16) return false;
+  if (box.top > y * 16) return false;
+  if (box.bottom < y * 16 - 16) return false;
 
   return true;
 }
