@@ -75,9 +75,10 @@ Map::Tile Map::tile(int x, int y) {
 
   Tile tile;
 
-  if (t >= 'A' && t <= 'X') {
+  if (t >= 'A' && t <= 'Z') {
     tile.obstruction = true;
-    tile.friction = t > 'R' ? 0.0001f : 0.0005f;
+    tile.friction = 0.0005f;
+    if (t >= 'S' && t <= 'X') tile.friction = 0.0001f;
   } else {
     tile.obstruction = false;
   }
