@@ -25,12 +25,12 @@ void Map::load(std::string file) {
 
   fprintf(stderr, "Read map as %d x %d\n", width, height);
 
-  // TODO read objects
+  // TODO read signs
   // for now just manually add the sign
   signs = SignSet();
   signs.push_back(std::shared_ptr<Sign>(new Sign(2, 27, "Arrows to move, space to jump")));
-  signs.push_back(std::shared_ptr<Sign>(new Sign(65, 13, "Do not eat my berries!")));
-  signs.push_back(std::shared_ptr<Sign>(new Sign(81, 13, "Press shift to eat berries.")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(65, 12, "Do not eat my berries!")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(69, 12, "Press shift to eat berries.")));
 
   // TODO read player starting posision
 
