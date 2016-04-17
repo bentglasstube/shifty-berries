@@ -29,6 +29,8 @@ class Player {
 
     Facing get_facing() { return facing; }
 
+    Rect bounding_box();
+
   protected:
 
     virtual Sprite* get_sprite() = 0;

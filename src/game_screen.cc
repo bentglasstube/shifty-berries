@@ -37,6 +37,8 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
 
+  map.update(player->bounding_box());
+
   return true;
 }
 

@@ -62,6 +62,10 @@ void Player::set_position(float x, float y, Player::Facing f) {
   facing = f;
 }
 
+Rect Player::bounding_box() {
+  return Rect(pos_x - get_width() / 2, pos_y - get_height(), pos_x + get_width() / 2, pos_y);
+}
+
 bool Player::on_ground() const {
   return velo_y == 0;
 }

@@ -13,6 +13,7 @@ void Map::load(std::string file) {
   FILE* fd = fopen(path.c_str(), "r");
   char line[1024];
 
+  // TODO read height
   height = 0;
 
   fprintf(stderr, "Loading map: %s\n", file.c_str());
@@ -23,6 +24,15 @@ void Map::load(std::string file) {
   }
 
   fprintf(stderr, "Read map as %d x %d\n", width, height);
+
+  // TODO read objects
+  // for now just manually add the sign
+  signs = SignSet();
+  signs.push_back(std::shared_ptr<Sign>(new Sign(2, 27, "Arrows to move, space to jump")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(65, 13, "Do not eat my berries!")));
+  signs.push_back(std::shared_ptr<Sign>(new Sign(81, 13, "Press shift to eat berries.")));
+
+  // TODO read player starting posision
 
   fclose(fd);
 }
@@ -45,6 +55,18 @@ void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
         tileset.draw(graphics, t - 'a' + 26, gx, gy);
       }
     }
+  }
+
+  for (SignSet::iterator i = signs.begin(); i != signs.end(); ++i) {
+    std::shared_ptr<Sign> sign = *i;
+    sign->draw(graphics);
+  }
+}
+
+void Map::update(Rect player) {
+  for (SignSet::iterator i = signs.begin(); i != signs.end(); ++i) {
+    std::shared_ptr<Sign> sign = *i;
+    sign->set_visibility(sign->collision(player));
   }
 }
 
