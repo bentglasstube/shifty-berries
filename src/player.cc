@@ -93,6 +93,11 @@ void Player::update_x(unsigned int elapsed, Map map) {
   } else {
     pos_x += velo_x * elapsed;
   }
+
+  if (pos_x < 0) {
+    pos_x = 0;
+    if (velo_x < 0) velo_x = 0;
+  }
 }
 
 void Player::update_y(unsigned int elapsed, Map map, Audio& audio) {
