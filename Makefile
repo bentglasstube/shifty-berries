@@ -37,4 +37,11 @@ ld35.wav: ld35.glc
 ld35.glc: $(EXECUTABLE)
 	glc-capture -so $@ $(EXECUTABLE)
 
+shifty-berries.tgz: $(EXECUTABLE)
+	mkdir shifty-berries
+	cp $(EXECUTABLE) README.md shifty-berries
+	cp -R content shifty-berries/content
+	tar zcf $@ shifty-berries
+	rm -rf shifty-berries
+
 .PHONY: all clean run video
