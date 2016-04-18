@@ -43,11 +43,11 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     }
   }
 
-  // TODO remove
-  if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT, 0);
-  if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN, 0);
-  if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD, 0);
-  if (input.key_pressed(SDLK_n)) player->set_position(10000, 0);
+  /* cheating keys */
+  /* if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT, 0); */
+  /* if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN, 0); */
+  /* if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD, 0); */
+  /* if (input.key_pressed(SDLK_n)) player->set_position(10000, 0); */
 
   player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
@@ -72,7 +72,8 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     shapeshift(GameScreen::Animal::HUMAN, 0);
     audio.play_sample("next");
     load_level(map.next_level());
-    camera.reset(map.player_x(), map.player_y());
+    // hack to reset the camera instantly
+    camera.update(10000, *player, map);
   }
 
   return true;
