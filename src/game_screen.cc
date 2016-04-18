@@ -8,7 +8,7 @@ void GameScreen::init() {
   current_form = GameScreen::Animal::HUMAN;
   player.reset(new Human());
   text.reset(new Text("text"));
-  load_level("test");
+  load_level("level1");
 }
 
 bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
@@ -37,7 +37,7 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
         shapeshift(GameScreen::Animal::GOAT, 15);
         audio.play_sample("shift");
       } else if (tile.c == 'h') {
-        shapeshift(GameScreen::Animal::BIRD, 10);
+        shapeshift(GameScreen::Animal::BIRD, 5);
         audio.play_sample("shift");
       }
     }
@@ -47,6 +47,7 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT, 0);
   if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN, 0);
   if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD, 0);
+  if (input.key_pressed(SDLK_n)) player->set_position(10000, 0);
 
   player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
@@ -71,7 +72,7 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     shapeshift(GameScreen::Animal::HUMAN, 0);
     audio.play_sample("next");
     load_level(map.next_level());
-    camera.reset();
+    camera.reset(map.player_x(), map.player_y());
   }
 
   return true;

@@ -14,6 +14,8 @@ void Map::load(std::string file) {
 
   name = file;
 
+  fprintf(stderr, "Loading level %s\n", file.c_str());
+
   {
     char a[32], b[32];
     fscanf(fd, "%d %d %d %32s %32s\n", &start_x, &start_y, &height, a, b);
@@ -24,6 +26,7 @@ void Map::load(std::string file) {
   for (int y = 0; y < height; ++y) fgets(tiles[y], sizeof(tiles[y]), fd);
   width = strlen(tiles[0]) - 1;
 
+  signs.clear();
   {
     int x, y;
     char t[100];
