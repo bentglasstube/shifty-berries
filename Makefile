@@ -1,17 +1,28 @@
+UNAME=$(shell uname)
+
 SOURCES=$(wildcard src/*.cc)
 CONTENT=$(wildcard content/*)
 BUILDDIR=build
 OBJECTS=$(patsubst %.cc,$(BUILDDIR)/%.o,$(SOURCES))
+NAME=shifty-berries
 APP_NAME="Shifty Berries"
 
 CC=clang++
 CFLAGS=-g --std=c++14
 CFLAGS+=-Wall -Wextra -Werror -pedantic
-LDFLAGS=-static-libstdc++ -static-libgcc
 
-LDLIBS=`sdl2-config --cflags --libs` -lSDL2_mixer
+ifeq ($(UNAME), Linux)
+	PACKAGE=$(NAME)-linux.tgz
+	LDFLAGS=-static-libstdc++ -static-libgcc
+	LDLIBS=`sdl2-config --cflags --libs` -lSDL2_mixer
+endif
+ifeq ($(UNAME), Darwin)
+	PACKAGE=$(NAME)-osx.tgz
+	LDLIBS=-framework SDL2 -framework SDL2_mixer -rpath @executable_path/../Frameworks
+	CFLAGS+=-mmacosx-version-min=10.9
+endif
 
-EXECUTABLE=$(BUILDDIR)/shifty-berries
+EXECUTABLE=$(BUILDDIR)/$(NAME)
 
 all: $(EXECUTABLE)
 
@@ -26,33 +37,35 @@ run: $(EXECUTABLE)
 	./$(EXECUTABLE)
 
 clean:
-	rm -rf $(BUILDDIR)
+	rm -rf $(BUILDDIR) $(APP_NAME).app $(PACKAGE) $(NAME).{mkv,glc,wav}
 
-video: ld35.mkv
+video: $(NAME).mkv
 
-ld35.mkv: ld35.glc ld35.wav
-	glc-play $< -o - -y 1 |ffmpeg -i - -i ld35.wav -acodec flac -vcodec libx264 -y $@
+$(NAME).mkv: $(NAME).glc $(NAME).wav
+	glc-play $< -o - -y 1 |ffmpeg -i - -i $(NAME).wav -acodec flac -vcodec libx264 -y $@
 
-ld35.wav: ld35.glc
+$(NAME).wav: $(NAME).glc
 	glc-play $< -a 1 -o $@
 
-ld35.glc: $(EXECUTABLE)
+$(NAME).glc: $(EXECUTABLE)
 	glc-capture -so $@ $(EXECUTABLE)
 
-shifty-berries-linux.tgz: $(EXECUTABLE)
-	mkdir shifty-berries
-	cp $(EXECUTABLE) README.md shifty-berries
-	cp -R content shifty-berries/content
-	tar zcf $@ shifty-berries
-	rm -rf shifty-berries
+$(NAME)-linux.tgz: $(EXECUTABLE)
+	mkdir $(NAME)
+	cp $(EXECUTABLE) README.md $(NAME)
+	cp -R content $(NAME)/content
+	tar zcf $@ $(NAME)
+	rm -rf $(NAME)
 
-shifty-berries-osx.tgz: dotapp
-	mkdir shifty-berries
-	cp -r $(APP_NAME).app shifty-berries/.
-	tar zcf $@ shifty-berries
-	rm -rf shifty-berries
+$(NAME)-osx.tgz: dotapp
+	mkdir $(NAME)
+	cp -r $(APP_NAME).app $(NAME)/.
+	tar zcf $@ $(NAME)
+	rm -rf $(NAME)
 
 dotapp: $(APP_NAME).app
+
+package: $(PACKAGE)
 
 $(APP_NAME).app: $(EXECUTABLE) launcher $(CONTENT) Info.plist
 	rm -rf $(APP_NAME).app
