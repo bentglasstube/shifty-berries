@@ -2,6 +2,7 @@ SOURCES=$(wildcard src/*.cc)
 CONTENT=$(wildcard content/*)
 BUILDDIR=build
 OBJECTS=$(patsubst %.cc,$(BUILDDIR)/%.o,$(SOURCES))
+APP_NAME="Shifty Berries"
 
 CC=clang++
 CFLAGS=-g --std=c++14
@@ -38,11 +39,29 @@ ld35.wav: ld35.glc
 ld35.glc: $(EXECUTABLE)
 	glc-capture -so $@ $(EXECUTABLE)
 
-shifty-berries.tgz: $(EXECUTABLE)
+shifty-berries-linux.tgz: $(EXECUTABLE)
 	mkdir shifty-berries
 	cp $(EXECUTABLE) README.md shifty-berries
 	cp -R content shifty-berries/content
 	tar zcf $@ shifty-berries
 	rm -rf shifty-berries
 
-.PHONY: all clean run video
+shifty-berries-osx.tgz: dotapp
+	mkdir shifty-berries
+	cp -r $(APP_NAME).app shifty-berries/.
+	tar zcf $@ shifty-berries
+	rm -rf shifty-berries
+
+dotapp: $(APP_NAME).app
+
+$(APP_NAME).app: $(EXECUTABLE) launcher $(CONTENT) Info.plist
+	rm -rf $(APP_NAME).app
+	mkdir -p $(APP_NAME).app/Contents/{MacOS,Frameworks}
+	cp $(EXECUTABLE) $(APP_NAME).app/Contents/MacOS/game
+	cp launcher $(APP_NAME).app/Contents/MacOS/launcher
+	cp -R content $(APP_NAME).app/Contents/MacOS/content
+	cp Info.plist $(APP_NAME).app/Contents/Info.plist
+	cp -R /Library/Frameworks/SDL2.framework $(APP_NAME).app/Contents/Frameworks/SDL2.framework
+	cp -R /Library/Frameworks/SDL2_mixer.framework $(APP_NAME).app/Contents/Frameworks/SDL2_mixer.framework
+
+.PHONY: all clean run video dotapp
