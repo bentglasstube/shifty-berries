@@ -8,8 +8,7 @@ NAME=shifty-berries
 APP_NAME="Shifty Berries"
 
 CC=clang++
-CFLAGS=-g --std=c++14
-CFLAGS+=-Wall -Wextra -Werror -pedantic
+CFLAGS=-O3 --std=c++14 -Wall -Wextra -pedantic
 
 ifeq ($(UNAME), Linux)
 	PACKAGE=$(NAME)-linux.tgz
