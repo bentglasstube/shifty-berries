@@ -12,22 +12,22 @@ void GameScreen::init() {
 }
 
 bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
-  if (input.key_pressed(SDLK_ESCAPE)) return false;
+  if (input.key_pressed(SDL_SCANCODE_ESCAPE)) return false;
 
-  if (input.key_held(SDLK_a) && input.key_held(SDLK_d)) {
+  if (input.key_held(SDL_SCANCODE_A) && input.key_held(SDL_SCANCODE_D)) {
     player->stop_moving();
-  } else if (input.key_held(SDLK_a)) {
+  } else if (input.key_held(SDL_SCANCODE_A)) {
     player->move_left();
-  } else if (input.key_held(SDLK_d)) {
+  } else if (input.key_held(SDL_SCANCODE_D)) {
     player->move_right();
   } else {
     player->stop_moving();
   }
 
-  if (input.key_pressed(SDLK_SPACE)) player->jump(audio);
+  if (input.key_pressed(SDL_SCANCODE_SPACE)) player->jump(audio);
 
   // TODO put this somewhere sane
-  if (input.key_pressed(SDLK_j)) {
+  if (input.key_pressed(SDL_SCANCODE_J)) {
     if (current_form == GameScreen::Animal::HUMAN) {
       Map::Tile tile = map.tile_at(player->x_position(), player->y_position() - 4);
 
