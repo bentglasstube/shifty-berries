@@ -44,10 +44,10 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
   }
 
   /* cheating keys */
-  /* if (input.key_pressed(SDLK_g)) shapeshift(GameScreen::Animal::GOAT, 0); */
-  /* if (input.key_pressed(SDLK_h)) shapeshift(GameScreen::Animal::HUMAN, 0); */
-  /* if (input.key_pressed(SDLK_b)) shapeshift(GameScreen::Animal::BIRD, 0); */
-  /* if (input.key_pressed(SDLK_n)) player->set_position(10000, 0); */
+  /* if (input.key_pressed(SDL_SCANCODE_G)) shapeshift(GameScreen::Animal::GOAT, 0); */
+  /* if (input.key_pressed(SDL_SCANCODE_H)) shapeshift(GameScreen::Animal::HUMAN, 0); */
+  /* if (input.key_pressed(SDL_SCANCODE_B)) shapeshift(GameScreen::Animal::BIRD, 0); */
+  /* if (input.key_pressed(SDL_SCANCODE_N)) player->set_position(10000, 0); */
 
   player->update(elapsed, map, audio);
   camera.update(elapsed, *player, map);
