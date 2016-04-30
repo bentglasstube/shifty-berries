@@ -34,7 +34,7 @@ class Player {
 
   protected:
 
-    virtual Sprite* get_sprite() = 0;
+    virtual Sprite* get_sprite() { return NULL; }
 
     bool on_ground() const;
 
