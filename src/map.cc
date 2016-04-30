@@ -58,7 +58,7 @@ void Map::draw(Graphics& graphics, int x_offset, int y_offset) {
 
       // Draw map data for debugging
       /* char buffer[2]; */
-      /* snprintf(buffer, 2, "%c", t); */
+      /* sprintf(buffer, "%c", t); */
       /* text.draw(graphics, buffer, gx, gy); */
     }
   }

@@ -52,7 +52,7 @@ void Game::loop() {
       if (SHOW_FPS) {
         const float fps = 1000.0f / frame_ticks;
         char buffer[10];
-        snprintf(buffer, 10, "%.1f", fps);
+        sprintf(buffer, "%.1f", fps);
         text.draw(graphics, buffer, 640, 464, Text::RIGHT);
       }
 
