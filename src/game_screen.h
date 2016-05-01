@@ -32,5 +32,6 @@ class GameScreen : public Screen {
     Animal current_form;
     Map map;
     Camera camera;
-    int shapeshift_timer;
+    int shapeshift_timer, run_timer, death_count;
+    bool finished;
 };

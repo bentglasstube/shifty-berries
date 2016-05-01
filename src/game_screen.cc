@@ -1,6 +1,7 @@
 #include "game_screen.h"
 
 #include "bird.h"
+#include "finish_screen.h"
 #include "goat.h"
 #include "human.h"
 
@@ -66,15 +67,23 @@ bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elap
     shapeshift(GameScreen::Animal::HUMAN, 0);
     audio.play_sample("death");
     load_level(map.current_level());
+    death_count++;
   }
 
   if (player->x_position() > map.pixel_width() + 8) {
     shapeshift(GameScreen::Animal::HUMAN, 0);
     audio.play_sample("next");
-    load_level(map.next_level());
+    if (map.next_level() == "DONE") {
+      finished = true;
+      return false;
+    } else {
+      load_level(map.next_level());
+    }
     // hack to reset the camera instantly
     camera.update(10000, *player, map);
   }
+
+  run_timer += elapsed;
 
   return true;
 }
@@ -89,10 +98,25 @@ void GameScreen::draw(Graphics& graphics) {
     sprintf(buffer, "%2d", (shapeshift_timer + 999) / 1000);
     text->draw(graphics, buffer, graphics.get_width() / 2, graphics.get_height() - 32, Text::Alignment::CENTER);
   }
+
+  {
+    char buffer[50];
+    snprintf(buffer, 50, "%d", death_count);
+    text->draw(graphics, buffer, 8, 8);
+
+    snprintf(buffer, 50, "%d:%02d.%03d", run_timer / 60000, (run_timer / 1000) % 60, run_timer % 1000);
+    text->draw(graphics, buffer, graphics.get_width() - 8, 8, Text::Alignment::RIGHT);
+  }
 }
 
 Screen* GameScreen::next_screen() {
-  return NULL;
+  if (finished) {
+    FinishScreen* finish = new FinishScreen();
+    finish->set_results(run_timer, death_count);
+    return finish;
+  } else {
+    return NULL;
+  }
 }
 
 void GameScreen::load_level(std::string level) {
