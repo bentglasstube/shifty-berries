@@ -10,6 +10,9 @@ void GameScreen::init() {
   player.reset(new Human());
   text.reset(new Text("text"));
   load_level("level1");
+
+  shapeshift_timer = run_timer = death_count = 0;
+  finished = false;
 }
 
 bool GameScreen::update(Input& input, Audio& audio, Graphics&, unsigned int elapsed) {
