@@ -14,16 +14,28 @@ void Map::load(std::string file) {
 
   name = file;
 
+  // TODO clear out tiles map
+
   fprintf(stderr, "Loading level %s\n", file.c_str());
 
   {
     char a[32], b[32];
-    fscanf(fd, "%d %d %d %32s %32s\n", &start_x, &start_y, &height, a, b);
+    int count = fscanf(fd, "%d %d %d %32s %32s\n", &start_x, &start_y, &height, a, b);
+    if (count < 5) {
+      fprintf(stderr, "Error reading map %s metadata\n", file.c_str());
+      return;
+    }
     next = a;
     bg = b;
   }
 
-  for (int y = 0; y < height; ++y) fgets(tiles[y], sizeof(tiles[y]), fd);
+  for (int y = 0; y < height; ++y) {
+    char* result = fgets(tiles[y], sizeof(tiles[y]), fd);
+    if (result != tiles[y]) {
+      fprintf(stderr, "Error reading map %s line %d\n", file.c_str(), y);
+      return;
+    }
+  }
   width = strlen(tiles[0]) - 1;
 
   signs.clear();
