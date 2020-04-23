@@ -12,7 +12,5 @@
     <string>Shifty Berries</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
-    <key>CFBundleIconFile</key>
-    <string>icon</string>
   </dict>
 </plist>

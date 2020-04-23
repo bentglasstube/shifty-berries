@@ -97,7 +97,7 @@ void GameScreen::draw(Graphics& graphics) {
   player->draw(graphics, camera.x_offset(), camera.y_offset());
 
   if (shapeshift_timer > 0) {
-    char buffer[3];
+    char buffer[8];
     sprintf(buffer, "%2d", (shapeshift_timer + 999) / 1000);
     text->draw(graphics, buffer, graphics.get_width() / 2, graphics.get_height() - 32, Text::Alignment::CENTER);
   }

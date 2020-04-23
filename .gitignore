@@ -1,5 +1,12 @@
-build
-todo.md
-shifty-berries*
-*.app/
-*.dll
+bazel-*
+/*.zip
+/*.tgz
+/*.app
+/*.AppImage
+/*.AppDir
+/*.data
+/*.html
+/*.js
+/*.wasm
+/*-web-*/
+*output/
