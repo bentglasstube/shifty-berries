@@ -6,11 +6,9 @@
 
 #include "audio.h"
 #include "input.h"
-#include "text.h"
 #include "title_screen.h"
 
 namespace {
-  const bool SHOW_FPS = false;
   const unsigned int FPS = 60;
   const unsigned int MSPF = 1000 / FPS;
 }
@@ -28,8 +26,6 @@ void Game::loop() {
   Graphics graphics(640, 480);
   Audio audio;
   Input input;
-
-  Text text("text");
 
   unsigned int last_update = SDL_GetTicks();
 
@@ -49,12 +45,6 @@ void Game::loop() {
       graphics.clear();
       screen->draw(graphics);
 
-      if (SHOW_FPS) {
-        const float fps = 1000.0f / frame_ticks;
-        char buffer[10];
-        sprintf(buffer, "%.1f", fps);
-        text.draw(graphics, buffer, 640, 464, Text::RIGHT);
-      }
 
       graphics.flip();
 
