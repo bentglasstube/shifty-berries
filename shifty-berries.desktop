@@ -2,8 +2,8 @@
 
 Type=Application
 Version=1.0
-Name=Algernon
+Name=Shifty Berries
 Terminal=false
 Icon=icon
-Exec=algernon
+Exec=shifty-berries
 Categories=Game;

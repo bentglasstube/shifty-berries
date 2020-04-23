@@ -11,6 +11,7 @@ class Player {
     enum Facing { LEFT, RIGHT };
 
     Player();
+    virtual ~Player() {}
 
     void update(unsigned int elapsed, Map& map, Audio& audio);
     void draw(Graphics& graphics, int x_offset, int y_offset);

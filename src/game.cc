@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "audio.h"
-#include "input.h"
 #include "title_screen.h"
 
 namespace {
@@ -22,44 +20,47 @@ Game::~Game() {
   SDL_Quit();
 }
 
-void Game::loop() {
-  Graphics graphics(640, 480);
-  Audio audio;
-  Input input;
+void Game::start() {
+  graphics.reset(new Graphics(640, 480));
 
-  unsigned int last_update = SDL_GetTicks();
+  last_update = SDL_GetTicks();
 
   screen.reset(new TitleScreen());
   screen->init();
+}
 
-  while (true) {
-    const unsigned int start = SDL_GetTicks();
+bool Game::step() {
+  const unsigned int start = SDL_GetTicks();
 
-    if (!audio.music_playing()) audio.play_music(screen->get_music_track());
-    if (!screen->process_input(input)) return;
+  if (!audio.music_playing()) audio.play_music(screen->get_music_track());
+  if (!screen->process_input(input)) return false;
 
-    const unsigned int update = SDL_GetTicks();
-    const unsigned int frame_ticks = update - last_update;
-    if (screen->update(input, audio, graphics, frame_ticks)) {
+  const unsigned int update = SDL_GetTicks();
+  const unsigned int frame_ticks = update - last_update;
+  if (screen->update(input, audio, static_cast<Graphics&>(*graphics), frame_ticks)) {
 
-      graphics.clear();
-      screen->draw(graphics);
+    graphics->clear();
+    screen->draw(static_cast<Graphics&>(*graphics));
+    graphics->flip();
 
+  } else {
 
-      graphics.flip();
+    screen.reset(screen->next_screen());
+    if (!screen) return false;
+    screen->init();
 
-    } else {
-
-      screen.reset(screen->next_screen());
-      if (!screen) return;
-      screen->init();
-
-      audio.stop_music();
-    }
-
-    last_update = update;
-
-    const unsigned int elapsed = SDL_GetTicks() - start;
-    if (MSPF > elapsed) SDL_Delay(MSPF - elapsed);
+    audio.stop_music();
   }
+
+  last_update = update;
+
+  const unsigned int elapsed = SDL_GetTicks() - start;
+  if (MSPF > elapsed) SDL_Delay(MSPF - elapsed);
+
+  return true;
+}
+
+void Game::loop() {
+  start();
+  while (step()) {}
 }

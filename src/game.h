@@ -2,7 +2,9 @@
 
 #include <memory>
 
+#include "audio.h"
 #include "graphics.h"
+#include "input.h"
 #include "screen.h"
 
 class Game {
@@ -11,9 +13,16 @@ class Game {
     Game();
     ~Game();
 
+    void start();
+    bool step();
     void loop();
 
   private:
 
-    std::shared_ptr<Screen> screen;
+    std::unique_ptr<Screen> screen;
+    std::unique_ptr<Graphics> graphics;
+    Audio audio;
+    Input input;
+
+    unsigned int last_update;
 };
