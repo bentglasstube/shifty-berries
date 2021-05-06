@@ -1,6 +1,5 @@
 #include "graphics.h"
 
-#include "game.h"
 Graphics::Graphics(int width, int height) : width(width), height(height) {
   int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
