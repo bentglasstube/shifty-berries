@@ -8,6 +8,8 @@ Graphics::Graphics(int width, int height) : width(width), height(height) {
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest"); // retro!
   SDL_RenderSetLogicalSize(renderer, width, height);
+  SDL_RenderSetIntegerScale(renderer, SDL_TRUE);
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
 
 Graphics::~Graphics() {
